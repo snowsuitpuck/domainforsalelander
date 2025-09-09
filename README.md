@@ -1,7 +1,6 @@
 # Domain For Sale Landing (React + Vite)
 
 This is a minimal React + Vite landing page that automatically displays the active hostname (the parked domain) and a single call-to-action to email our acquisitions inbox. Ready for Cloudflare Pages deployment.
-poop
 ## Features
 - Auto-detects domain (window.location.host) and updates page title/SEO at runtime
 - One clean CTA: email domains@blankhappens.com

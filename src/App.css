@@ -27,6 +27,8 @@ body {
   max-width: 720px;
   width: 100%;
   box-shadow: 0 10px 30px rgba(2, 6, 23, 0.08);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .pill {
@@ -44,10 +46,9 @@ body {
 .title {
   font-size: clamp(28px, 6vw, 48px);
   margin: 6px 0 8px;
-  /* Ensure very long domains (without hyphens) wrap and the container expands */
-  overflow-wrap: anywhere;
-  word-break: break-word;
-  line-break: anywhere;
+  /* Keep very long domains on a single line; enable horizontal scroll on the card if needed */
+  white-space: nowrap;
+  display: block; /* Force the domain onto its own line under the heading */
 }
 .subtitle { margin: 0 auto 18px; font-size: 16px; opacity: .9; max-width: 700px; }
 
