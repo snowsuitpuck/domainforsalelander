@@ -1,200 +1,124 @@
-import { useState, useEffect } from 'react';
+import { useMemo, useEffect } from 'react';
 import './App.css';
 
 function App() {
-    const [isVisible, setIsVisible] = useState(false);
+  // Determine domain and optional price from querystring (?price=)
+  const { domain, price } = useMemo(() => {
+    const host = typeof window !== 'undefined' ? window.location.host : '';
+    const params = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
+    const priceParam = params.get('price');
+    return { domain: host || 'This Domain', price: priceParam };
+  }, []);
 
-    useEffect(() => {
-        // Fade in content
-        setTimeout(() => setIsVisible(true), 100);
+  // Basic runtime SEO updates using detected domain
+  useEffect(() => {
+    const title = `${domain} is for sale`;
+    document.title = title;
 
-        // Load JotForm script
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js';
-        script.onload = () => {
-            if (window.jotformEmbedHandler) {
-                window.jotformEmbedHandler(
-                    "iframe[id='JotFormIFrame-250896548324164']",
-                    "https://form.jotform.com/"
-                );
-            }
-        };
-        document.body.appendChild(script);
+    const setMeta = (name, content) => {
+      if (!content) return;
+      let el = document.querySelector(`meta[name="${name}"]`);
+      if (!el) {
+        el = document.createElement('meta');
+        el.setAttribute('name', name);
+        document.head.appendChild(el);
+      }
+      el.setAttribute('content', content);
+    };
 
-        return () => {
-            if (script.parentNode) {
-                document.body.removeChild(script);
-            }
-        };
-    }, []);
+    const setOG = (property, content) => {
+      if (!content) return;
+      let el = document.querySelector(`meta[property="${property}"]`);
+      if (!el) {
+        el = document.createElement('meta');
+        el.setAttribute('property', property);
+        document.head.appendChild(el);
+      }
+      el.setAttribute('content', content);
+    };
 
-    return (
-        <div className={`page-wrapper ${isVisible ? 'fade-in' : ''}`}>
-            <div className="app-container">
-                <header className="header">
-                    <div className="header-content">
-                        <h1 className="logo">BrokeHappens.com</h1>
-                        <p className="tagline">A Referral and Resource Platform for Individuals Facing Financial Hardship</p>
-                    </div>
-                </header>
+    const description = `Premium domain ${domain} is for sale. Acquire it today to elevate your brand and credibility.`;
+    setMeta('description', description);
+    setOG('og:title', title);
+    setOG('og:description', description);
+    setOG('og:type', 'website');
+    setOG('og:url', typeof window !== 'undefined' ? window.location.href : '');
+    setOG('twitter:card', 'summary_large_image');
+  }, [domain]);
 
-                <div className="hero-section">
-                    <div className="hero-content">
-                        <h2 className="hero-title">Being broke is just a temporary situation</h2>
-                        <p className="hero-description">Our mission is to connect you with trusted financial services to help navigate life's toughest financial moments</p>
-                    </div>
-                </div>
+  // Obfuscate email to limit scraping; you can change this to your buyer inbox
+  const emailUser = 'sales';
+  const emailDomain = 'example.com';
+  const contactEmail = `${emailUser}@${emailDomain}`;
 
-                <main className="main">
-                    <div className="left-column">
-                        <div className="welcome-section">
-                            <h2>We're Here To Help</h2>
-                            <p className="intro-text">
-                                Whether you're looking to consolidate debt, improve your credit, or apply for a personal loan, we're here to guide you forward.
-                            </p>
+  const subject = encodeURIComponent(`Inquiry about ${domain}`);
+  const defaultBody = `Hi, I am interested in purchasing ${domain}.${price ? `\n\nAdvertised price: ${price}` : ''}\n\nMy offer: $____\nTimeline to close: ____ days\nPreferred contact method: ____`;
+  const body = encodeURIComponent(defaultBody);
+  const mailto = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
 
-                            <div className="services-list">
-                                <h3>Our Services Include:</h3>
-                                <div className="benefits-list">
-                                    <div className="benefit-item">
-                                        <div className="benefit-icon">✓</div>
-                                        <div className="benefit-text">Debt relief & settlement</div>
-                                    </div>
-                                    <div className="benefit-item">
-                                        <div className="benefit-icon">✓</div>
-                                        <div className="benefit-text">Credit repair & monitoring</div>
-                                    </div>
-                                    <div className="benefit-item">
-                                        <div className="benefit-icon">✓</div>
-                                        <div className="benefit-text">Personal & emergency loans</div>
-                                    </div>
-                                    <div className="benefit-item">
-                                        <div className="benefit-icon">✓</div>
-                                        <div className="benefit-text">Low-cost health & auto insurance</div>
-                                    </div>
-                                    <div className="benefit-item">
-                                        <div className="benefit-icon">✓</div>
-                                        <div className="benefit-text">Budgeting tips & savings resources</div>
-                                    </div>
-                                    <div className="benefit-item">
-                                        <div className="benefit-icon">✓</div>
-                                        <div className="benefit-text">Affordable housing options</div>
-                                    </div>
-                                    <div className="benefit-item">
-                                        <div className="benefit-icon">✓</div>
-                                        <div className="benefit-text">Legal claim evaluations & resources</div>
-                                    </div>
-                                    <div className="benefit-item">
-                                        <div className="benefit-icon">✓</div>
-                                        <div className="benefit-text">Pre-settlement funding options</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="trust-indicators">
-                                <div className="testimonial">
-                                    <p className="quote">"I was drowning in debt until I found BrokeHappens. Now I'm back on track and saving $450 every month!"</p>
-                                    <p className="author">— Sarah T., Phoenix</p>
-                                </div>
-
-                                <div className="stats">
-                                    <div className="stat-item">
-                                        <div className="stat-number">5,000+</div>
-                                        <div className="stat-label">People helped</div>
-                                    </div>
-                                    <div className="stat-item">
-                                        <div className="stat-number">$15M+</div>
-                                        <div className="stat-label">Debt reduced</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="right-column">
-                        <div className="form-container">
-                            <div className="form-header">
-                                <h3>Take Our Financial Health Check</h3>
-                                <p>Answer a few questions to get matched with services that can help</p>
-                            </div>
-
-                            <iframe
-                                id="JotFormIFrame-250896548324164"
-                                title="BrokeHappens Form A"
-                                allow="geolocation; microphone; camera; fullscreen"
-                                allowTransparency="true"
-                                src="https://form.jotform.com/250896548324164"
-                                frameBorder="0"
-                                style={{
-                                    minWidth: '100%',
-                                    maxWidth: '100%',
-                                    height: '690px',
-                                    border: 'none'
-                                }}
-                                scrolling="no"
-                            ></iframe>
-
-                            <div className="privacy-note">
-                                Your information is secure and will never be shared with third parties.
-                                <br />
-                                <small>By submitting, you agree to receive communications from BrokeHappens™ and its partners. Consent is not required to use the service.</small>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-
-                <section className="how-it-works">
-                    <h2 className="section-title">How It Works</h2>
-                    <div className="steps-container">
-                        <div className="step">
-                            <div className="step-number">1</div>
-                            <h3>Take Our Financial Health Check</h3>
-                            <p>Answer a few short questions to help us understand your financial situation.</p>
-                        </div>
-                        <div className="step">
-                            <div className="step-number">2</div>
-                            <h3>Get Matched with Services</h3>
-                            <p>Based on your needs, we refer you to trusted providers who can help.</p>
-                        </div>
-                        <div className="step">
-                            <div className="step-number">3</div>
-                            <h3>Take Action Today</h3>
-                            <p>Get personalized referrals and tools that help you get back on track.</p>
-                        </div>
-                    </div>
-                </section>
-
-                <section className="full-intro">
-                    <div className="intro-container">
-                        <h2>About BrokeHappens</h2>
-                        <p className="full-intro-text">
-                            Are you struggling to pay your bills? Feeling overwhelmed by debt? You're not alone—BrokeHappens.
-                            At BrokeHappens.com, we believe being broke is just a temporary situation. Our mission is to connect
-                            individuals with trusted financial service providers who can help navigate life's toughest financial
-                            moments. Whether you're looking to consolidate debt, improve your credit, or apply for a personal loan,
-                            we're here to guide you forward.
-                        </p>
-                    </div>
-                </section>
-
-                <footer className="footer">
-                    <div className="footer-content">
-                        <div className="footer-legal">
-                            <p>© 2025 BrokeHappens.com. All rights reserved.</p>
-                            <p className="ownership">BrokeHappens.com is owned and operated by Winston Wolfe Holdings LLC</p>
-                            <p className="trademark">BrokeHappens™ is a trademark of Winston Wolfe Holdings LLC.</p>
-                            <div className="footer-links">
-                                <a href="/privacy-policy.html">Privacy Policy</a>
-                                <a href="/terms-of-service.html">Terms of Service</a>
-                                <a href="/contact-us.html">Contact Us</a>
-                            </div>
-                            <p className="address">Winston Wolfe Holdings LLC<br />1835 East Hallandale Beach Blvd, Suite 437<br />Hallandale, FL 33009</p>
-                        </div>
-                    </div>
-                </footer>
-            </div>
+  return (
+    <div className="dfsl-page">
+      <header className="dfsl-header">
+        <div className="dfsl-wrap">
+          <div className="dfsl-badge">Domain For Sale</div>
+          <h1 className="dfsl-domain">{domain}</h1>
+          <p className="dfsl-sub">Own this premium domain and elevate your brand.</p>
+          {price && (
+            <div className="dfsl-price">Asking price: <strong>{price}</strong></div>
+          )}
+          <div className="dfsl-cta-row">
+            <a className="dfsl-btn dfsl-btn-primary" href={mailto}>
+              Inquire Now
+            </a>
+            <a className="dfsl-btn dfsl-btn-outline" href="/contact-us.html">
+              Make an Offer
+            </a>
+          </div>
+          <p className="dfsl-note">Serious buyers only. Escrow and fast transfer available.</p>
         </div>
-    );
+      </header>
+
+      <main className="dfsl-main dfsl-wrap">
+        <section className="dfsl-grid">
+          <div className="dfsl-card">
+            <h2>Why acquire {domain}?</h2>
+            <ul className="dfsl-list">
+              <li>Instant credibility and memorability</li>
+              <li>Better SEO and direct type-in traffic</li>
+              <li>Protect your brand and marketing spend</li>
+              <li>Flexible payment and escrow options</li>
+            </ul>
+          </div>
+          <div className="dfsl-card">
+            <h2>Included with purchase</h2>
+            <ul className="dfsl-list">
+              <li>Quick push/transfer at major registrars</li>
+              <li>Free 30-day DNS hosting</li>
+              <li>Sales agreement and invoice</li>
+              <li>Support through closing</li>
+            </ul>
+          </div>
+        </section>
+
+        <section className="dfsl-offer">
+          <h2>Ready to buy {domain}?</h2>
+          <p>Contact us to negotiate or complete the purchase.</p>
+          <a className="dfsl-btn dfsl-btn-primary" href={mailto}>Contact Sales</a>
+        </section>
+      </main>
+
+      <footer className="dfsl-footer">
+        <div className="dfsl-wrap dfsl-footer-inner">
+          <nav className="dfsl-links">
+            <a href="/privacy-policy.html">Privacy Policy</a>
+            <a href="/terms-of-service.html">Terms of Service</a>
+            <a href="/contact-us.html">Contact Us</a>
+          </nav>
+          <div className="dfsl-copy">© {new Date().getFullYear()} Domain For Sale Landing. All rights reserved.</div>
+        </div>
+      </footer>
+    </div>
+  );
 }
 
 export default App;

@@ -419,3 +419,42 @@ body, html, #root {
     line-height: 1.6;
   }
 }
+
+/* --- Domain For Sale Landing styles (dfsl-*) --- */
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; color: #0f172a; background: #f8fafc; }
+
+.dfsl-wrap { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+
+.dfsl-header { background: linear-gradient(180deg, #0f172a, #1e293b); color: #e2e8f0; padding: 56px 0 40px; text-align: center; }
+.dfsl-badge { display: inline-block; background: #22c55e; color: #052e16; font-weight: 700; padding: 6px 10px; border-radius: 999px; font-size: 12px; letter-spacing: .04em; margin-bottom: 14px; }
+.dfsl-domain { font-size: clamp(28px, 5vw, 48px); margin: 6px 0 8px; color: #fff; word-break: break-word; }
+.dfsl-sub { margin: 0 auto 14px; font-size: 16px; max-width: 700px; opacity: .9; }
+.dfsl-price { margin: 10px 0 18px; font-size: 16px; color: #f8fafc; }
+
+.dfsl-cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin: 8px 0 8px; }
+.dfsl-btn { display: inline-block; text-decoration: none; border-radius: 8px; padding: 12px 16px; font-weight: 600; border: 1px solid rgba(255,255,255,.2); transition: all .2s ease; }
+.dfsl-btn-primary { background: #22c55e; color: #052e16; border-color: #16a34a; }
+.dfsl-btn-primary:hover { background: #16a34a; color: #052e16; }
+.dfsl-btn-outline { background: transparent; color: #e2e8f0; }
+.dfsl-btn-outline:hover { border-color: #e2e8f0; }
+.dfsl-note { margin-top: 10px; font-size: 12px; opacity: .85; }
+
+.dfsl-main { padding: 40px 0; }
+.dfsl-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 768px) { .dfsl-grid { grid-template-columns: 1fr; } }
+
+.dfsl-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 8px 20px rgba(2, 6, 23, 0.05); }
+.dfsl-card h2 { margin: 0 0 10px; font-size: 20px; color: #0f172a; }
+.dfsl-list { margin: 0; padding-left: 18px; line-height: 1.8; color: #334155; }
+
+.dfsl-offer { text-align: center; margin-top: 28px; padding: 24px; background: #ecfeff; border: 1px solid #bae6fd; color: #0c4a6e; border-radius: 12px; }
+.dfsl-offer h2 { margin: 0 0 8px; }
+
+.dfsl-footer { background: #0b1220; color: #93a4bf; padding: 24px 0; }
+.dfsl-footer-inner { display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center; text-align: center; }
+.dfsl-links { display: flex; gap: 18px; flex-wrap: wrap; }
+.dfsl-links a { color: #cbd5e1; text-decoration: none; }
+.dfsl-links a:hover { text-decoration: underline; }
+.dfsl-copy { font-size: 12px; opacity: .9; }
