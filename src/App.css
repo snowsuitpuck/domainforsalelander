@@ -41,7 +41,14 @@ body {
   margin-bottom: 10px;
 }
 
-.title { font-size: clamp(28px, 6vw, 48px); margin: 6px 0 8px; }
+.title {
+  font-size: clamp(28px, 6vw, 48px);
+  margin: 6px 0 8px;
+  /* Ensure very long domains (without hyphens) wrap and the container expands */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-break: anywhere;
+}
 .subtitle { margin: 0 auto 18px; font-size: 16px; opacity: .9; max-width: 700px; }
 
 .cta {
