@@ -1,10 +1,13 @@
 import { useMemo, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import './App.css';
 
 function App() {
+  const location = useLocation();
+  
   const isForSalePage = useMemo(() => {
-    return typeof window !== 'undefined' && window.location && window.location.pathname.startsWith('/forsale');
-  }, []);
+    return location.pathname.startsWith('/forsale');
+  }, [location.pathname]);
 
   // Determine the active host (parked domain pointing to this lander)
   const domain = useMemo(() => {
@@ -75,7 +78,7 @@ function App() {
     <div className="lander">
       <div className="card">
         <div className="pill">Domain for sale</div>
-        <h1 className="title">{titleText}</h1>
+        <h1 className={`title${!isForSalePage ? ' domain' : ''}`}>{titleText}</h1>
         <p className="subtitle">{subtitleText}</p>
         <a className="cta" href={mailto}>Contact domains@blankhappens.com</a>
       </div>

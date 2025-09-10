@@ -3,9 +3,10 @@
 This is a minimal React + Vite landing page that automatically displays the active hostname (the parked domain) and a single call-to-action to email our acquisitions inbox. Ready for Cloudflare Pages deployment.
 ## Features
 - Auto-detects domain (window.location.host) and updates page title/SEO at runtime
+- Two routes: `/` (auto-detects domain) and `/forsale` (generic message)
+- Client-side routing with React Router
 - One clean CTA: email domains@blankhappens.com
-- No client-side routing, no frameworks beyond React
-- Cloudflare Pages support files: `_headers`, `robots.txt`, `sitemap.xml`
+- Cloudflare Pages support files: `_headers`, `robots.txt`, `sitemap.xml`, `_redirects`
 
 ## Configuration
 - Contact email is set to `domains@blankhappens.com` in `src/App.jsx`.

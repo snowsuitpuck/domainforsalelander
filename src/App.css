@@ -46,9 +46,12 @@ body {
 .title {
   font-size: clamp(28px, 6vw, 48px);
   margin: 6px 0 8px;
+  display: block;
+}
+
+.title.domain {
   /* Keep very long domains on a single line; enable horizontal scroll on the card if needed */
   white-space: nowrap;
-  display: block; /* Force the domain onto its own line under the heading */
 }
 .subtitle { margin: 0 auto 18px; font-size: 16px; opacity: .9; max-width: 700px; }
 
