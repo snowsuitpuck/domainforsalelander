@@ -2,6 +2,10 @@ import { useMemo, useEffect } from 'react';
 import './App.css';
 
 function App() {
+  const isForSalePage = useMemo(() => {
+    return typeof window !== 'undefined' && window.location && window.location.pathname.startsWith('/forsale');
+  }, []);
+
   // Determine the active host (parked domain pointing to this lander)
   const domain = useMemo(() => {
     return typeof window !== 'undefined' && window.location.host
@@ -9,9 +13,11 @@ function App() {
       : 'this domain';
   }, []);
 
-  // Basic runtime SEO updates using detected domain
+  // Basic runtime SEO updates depending on route
   useEffect(() => {
-    const title = `${domain} is for sale`;
+    const title = isForSalePage
+      ? 'The domain you are trying to reach is for sale.'
+      : `${domain} is for sale`;
     document.title = title;
 
     const setMeta = (name, content) => {
@@ -36,26 +42,41 @@ function App() {
       el.setAttribute('content', content);
     };
 
-    const description = `The domain ${domain} is for sale.`;
+    const description = isForSalePage
+      ? 'This domain is parked and available to acquire.'
+      : `The domain ${domain} is for sale.`;
     setMeta('description', description);
     setOG('og:title', title);
     setOG('og:description', description);
     setOG('og:type', 'website');
     setOG('og:url', typeof window !== 'undefined' ? window.location.href : '');
     setOG('twitter:card', 'summary');
-  }, [domain]);
+  }, [domain, isForSalePage]);
 
   const contactEmail = 'domains@blankhappens.com';
-  const subject = encodeURIComponent(`Inquiry about ${domain}`);
-  const body = encodeURIComponent(`Hi, I'm interested in ${domain}.\n\nMy offer: $____`);
+  const subject = encodeURIComponent(
+    isForSalePage ? 'Domain inquiry' : `Inquiry about ${domain}`
+  );
+  const body = encodeURIComponent(
+    isForSalePage
+      ? `Hi, I'm interested in this domain.\n\nMy offer: $____`
+      : `Hi, I'm interested in ${domain}.\n\nMy offer: $____`
+  );
   const mailto = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
+
+  const titleText = isForSalePage
+    ? 'The domain you are trying to reach is for sale.'
+    : domain;
+  const subtitleText = isForSalePage
+    ? 'This domain is parked and available to acquire.'
+    : `You reached this page because ${domain} is parked and available to acquire.`;
 
   return (
     <div className="lander">
       <div className="card">
         <div className="pill">Domain for sale</div>
-        <h1 className="title">{domain}</h1>
-        <p className="subtitle">You reached this page because {domain} is parked and available to acquire.</p>
+        <h1 className="title">{titleText}</h1>
+        <p className="subtitle">{subtitleText}</p>
         <a className="cta" href={mailto}>Contact domains@blankhappens.com</a>
       </div>
       <div className="foot">© {new Date().getFullYear()} All rights reserved.</div>
