@@ -9,12 +9,19 @@ function App() {
     return location.pathname.startsWith('/forsale');
   }, [location.pathname]);
 
-  // Determine the active host (parked domain pointing to this lander)
+  // Extract domain from URL parameters or use current host
   const domain = useMemo(() => {
+    if (isForSalePage) {
+      const urlParams = new URLSearchParams(location.search);
+      const srcDomain = urlParams.get('src');
+      if (srcDomain) {
+        return srcDomain;
+      }
+    }
     return typeof window !== 'undefined' && window.location.host
       ? window.location.host
       : 'this domain';
-  }, []);
+  }, [location.search, isForSalePage]);
 
   // Basic runtime SEO updates depending on route
   useEffect(() => {
@@ -68,10 +75,10 @@ function App() {
   const mailto = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
 
   const titleText = isForSalePage
-    ? 'The domain you are trying to reach is for sale.'
+    ? domain
     : domain;
   const subtitleText = isForSalePage
-    ? 'This domain is parked and available to acquire.'
+    ? `${domain} is parked and available to acquire.`
     : `You reached this page because ${domain} is parked and available to acquire.`;
 
   return (
