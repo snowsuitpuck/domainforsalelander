@@ -26,7 +26,7 @@ function App() {
   // Basic runtime SEO updates depending on route
   useEffect(() => {
     const title = isForSalePage
-      ? 'The domain you are trying to reach is for sale.'
+      ? 'Domain is for sale.'
       : `${domain} is for sale`;
     document.title = title;
 
