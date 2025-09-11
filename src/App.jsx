@@ -1,35 +1,20 @@
 import { useMemo, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 
-function App() {
+function ForSalePage() {
   const location = useLocation();
   
-  const isForSalePage = useMemo(() => {
-    return location.pathname.startsWith('/forsale');
-  }, [location.pathname]);
-
-  // Extract domain from URL parameters or use current host
+  // Extract domain from URL parameters
   const domain = useMemo(() => {
-    if (isForSalePage) {
-      const urlParams = new URLSearchParams(location.search);
-      const srcDomain = urlParams.get('src');
-      if (srcDomain) {
-        return srcDomain;
-      }
-      // No src parameter provided, return null to show generic content
-      return null;
-    }
-    return typeof window !== 'undefined' && window.location.host
-      ? window.location.host
-      : 'this domain';
-  }, [location.search, isForSalePage]);
+    const urlParams = new URLSearchParams(location.search);
+    const srcDomain = urlParams.get('src');
+    return srcDomain || null;
+  }, [location.search]);
 
-  // Basic runtime SEO updates depending on route
+  // Basic runtime SEO updates
   useEffect(() => {
-    const title = isForSalePage
-      ? 'Domain is for sale.'
-      : `${domain} is for sale`;
+    const title = 'Domain is for sale.';
     document.title = title;
 
     const setMeta = (name, content) => {
@@ -54,45 +39,44 @@ function App() {
       el.setAttribute('content', content);
     };
 
-    const description = isForSalePage
-      ? 'This domain is parked and available to acquire.'
-      : `The domain ${domain} is for sale.`;
+    const description = 'This domain is parked and available to acquire.';
     setMeta('description', description);
     setOG('og:title', title);
     setOG('og:description', description);
     setOG('og:type', 'website');
     setOG('og:url', typeof window !== 'undefined' ? window.location.href : '');
     setOG('twitter:card', 'summary');
-  }, [domain, isForSalePage]);
+  }, []);
 
   const contactEmail = 'domains@blankhappens.com';
-  const subject = encodeURIComponent(
-    isForSalePage ? 'Domain inquiry' : `Inquiry about ${domain}`
-  );
+  const subject = encodeURIComponent('Domain inquiry');
   const body = encodeURIComponent(
-    isForSalePage
-      ? `Hi, I'm interested in this domain.\n\nMy offer: $____`
-      : `Hi, I'm interested in ${domain}.\n\nMy offer: $____`
+    `Hi, I'm interested in this domain.\n\nMy offer: $____`
   );
   const mailto = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
 
-  const titleText = isForSalePage
-    ? (domain || 'Domains for Sale')
-    : domain;
-  const subtitleText = isForSalePage
-    ? (domain ? `${domain} is parked and available to acquire.` : 'Premium domains for sale.')
-    : `You reached this page because ${domain} is parked and available to acquire.`;
+  const titleText = domain || 'Domains for Sale';
+  const subtitleText = domain ? `${domain} is parked and available to acquire.` : 'Premium domains for sale.';
 
   return (
     <div className="lander">
       <div className="card">
         <div className="pill">Domain for sale</div>
-        <h1 className={`title${!isForSalePage ? ' domain' : ''}`}>{titleText}</h1>
+        <h1 className="title">{titleText}</h1>
         <p className="subtitle">{subtitleText}</p>
         <a className="cta" href={mailto}>Contact domains@blankhappens.com</a>
       </div>
       <div className="foot">© {new Date().getFullYear()} All rights reserved.</div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Navigate to="/forsale" replace />} />
+      <Route path="/forsale" element={<ForSalePage />} />
+    </Routes>
   );
 }
 

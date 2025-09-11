@@ -45,11 +45,9 @@ body {
   font-size: clamp(28px, 6vw, 48px);
   margin: 6px 0 8px;
   display: block;
-}
-
-.title.domain {
   /* Allow long domains to wrap to prevent horizontal scrolling */
   word-break: break-all;
+  overflow-wrap: break-word;
 }
 .subtitle { margin: 0 auto 18px; font-size: 16px; opacity: .9; max-width: 700px; }
 
