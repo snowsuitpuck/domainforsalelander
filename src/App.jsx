@@ -17,6 +17,8 @@ function App() {
       if (srcDomain) {
         return srcDomain;
       }
+      // No src parameter provided, return null to show generic content
+      return null;
     }
     return typeof window !== 'undefined' && window.location.host
       ? window.location.host
@@ -75,10 +77,10 @@ function App() {
   const mailto = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
 
   const titleText = isForSalePage
-    ? domain
+    ? (domain || 'Domains for Sale')
     : domain;
   const subtitleText = isForSalePage
-    ? `${domain} is parked and available to acquire.`
+    ? (domain ? `${domain} is parked and available to acquire.` : 'Premium domains for sale.')
     : `You reached this page because ${domain} is parked and available to acquire.`;
 
   return (
